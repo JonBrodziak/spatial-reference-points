@@ -71,6 +71,18 @@ Write_Input_Data<-function(filename)
   print('# Population biomass units for output (kilograms of fish)')
   print(OutputBiomassUnits)
   
+  print('# Maximum fishing mortality for reference point calculations')
+  print(MaxF)
+  
+  print('# Fishing mortality mesh for reference point calculations')
+  print(FMesh)
+  
+  print('# Number of grid points for reference point calculations')
+  print(NGrid)
+  
+  print('# Fishing mortality grid for reference point calculations')
+  print(FGrid)
+  
   print('#################################################################################################')
   print('# INITIIALIZING POPULATION CLASS')
   print('#################################################################################################')
@@ -430,18 +442,6 @@ Write_Input_Data<-function(filename)
   print('#################################################################################################')
   print('# INITIIALIZING OBSERVATION CLASS')
   print('#################################################################################################')
-  
-  print('# Maximum fishing mortality for reference point calculations')
-  print(MaxF)
-  
-  print('# Fishing mortality mesh for reference point calculations')
-  print(FMesh)
-  
-  print('# Number of grid points for reference point calculations')
-  print(NGrid)
-  
-  print('# Fishing mortality grid for reference point calculations')
-  print(FGrid)
   
   print('# Equilibrium fishing mortality by fleet: SimEquilibriumFishingMortality[NFleet,NArea]')
   for (i in 1:NFleet) {

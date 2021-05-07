@@ -6,7 +6,7 @@
 ################################################################################################
 # Write unfished equilibrium results to output file
   #-----------------------------------------------------------------
-  sink(file=OutputFile,append=TRUE,split=TRUE)
+  sink(file=OutputFile,append=TRUE,type="output")
   
 # ITERATION 1
 
@@ -21,12 +21,10 @@ print('_________________________________________________________________________
 print('Calculating unfished equilibrium population numbers at age and spawning biomasses ...')
 print('_____________________________________________________________________________________________________')
 
-# Write unfished equilibrium results to output file
-#-----------------------------------------------------------------
-sink(file=OutputFile,append=TRUE,type="output")
-
 i <- 1
 a <- 1
+
+R.Iteration[i,,] <- Recruitment.UnfishedR
 
 for (p in 1:NPopulation)
   for (d in 1:NArea)
@@ -35,7 +33,7 @@ for (p in 1:NPopulation)
       tmp <- 0.0
       for (k in 1:NArea)
       {
-        tmp <- tmp + Recruitment.GenderFraction[p,k,g]*RecruitmentDistribution[p,k,d]*Recruitment.UnfishedR[p,k]
+        tmp <- tmp + Recruitment.GenderFraction[p,k,g]*RecruitmentDistribution[p,k,d]*R.Iteration[i,p,k]
       }
       EquilibriumNumbersAtAge[i,p,d,g,a] <- tmp
     }
@@ -72,7 +70,7 @@ for (p in 1:NPopulation)
     {
       for (a in 1:NAge)
       {
-        tmp <- EquilibriumNumbersAtAge[i,p,d,g,a]*MeanWeightSpawning[p,d,g,a]*MaturityProbabilityAtAge[p,d,g,a]*exp(-SpawningZFraction[p,d]*NaturalMortality[p,d,g,a])
+        tmp <- EquilibriumNumbersAtAge[i,p,d,g,a]*UnfishedMeanWeightSpawning[p,d,g,a]*MaturityProbabilityAtAge[p,d,g,a]*exp(-SpawningZFraction[p,d]*NaturalMortality[p,d,g,a])
         EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g] + tmp
       }
       # Rescale to Spawning Biomass Units
@@ -101,10 +99,21 @@ if (VerboseEquilibriumOutput == 1) {
 
 i <- i+1
 
+# Compute recruitment production by population and area for i=2
+#-----------------------------------------------------------------
+for (p in 1:NPopulation)
+  for (d in 1:NArea)
+  {
+    if (Recruitment.model[p,d] == 1)
+      parameters <- c(Recruitment.model[p,d],EquilibriumSpawningBiomass[(i-1),p,d,1], Recruitment.UnfishedR[p,d], Recruitment.steepness[p,d])
+    R.Iteration[i,p,d] <- StockRecruitment(EquilibriumSpawningBiomass[(i-1),p,d,1],parameters)
+  }
+
 # Compute unfished recruitment strength by population, 
 # area, and gender for iteration i=2
 #-----------------------------------------------------------------
 a <- 1
+
 for (p in 1:NPopulation) {
   for (d in 1:NArea)
     for (g in 1:NGender)
@@ -112,7 +121,7 @@ for (p in 1:NPopulation) {
       tmp <- 0.0
       for (k in 1:NArea)
       {
-        tmp <- tmp + Recruitment.GenderFraction[p,k,g]*RecruitmentDistribution[p,k,d]*Recruitment.UnfishedR[p,k]
+        tmp <- tmp + Recruitment.GenderFraction[p,k,g]*RecruitmentDistribution[p,k,d]*R.Iteration[i,p,k]
       }
       EquilibriumNumbersAtAge[i,p,d,g,a] <- tmp
     }
@@ -166,7 +175,7 @@ for (p in 1:NPopulation)
       tmp <- 0.0
       for (a in 1:NAge)
       {
-        tmp <- tmp + EquilibriumNumbersAtAge[i,p,d,g,a]*MeanWeightSpawning[p,d,g,a]*MaturityProbabilityAtAge[p,d,g,a]*exp(-SpawningZFraction[p,d]*NaturalMortality[p,d,g,a])
+        tmp <- tmp + EquilibriumNumbersAtAge[i,p,d,g,a]*UnfishedMeanWeightSpawning[p,d,g,a]*MaturityProbabilityAtAge[p,d,g,a]*exp(-SpawningZFraction[p,d]*NaturalMortality[p,d,g,a])
       }   
       EquilibriumSpawningBiomass[i,p,d,g] <- tmp
       # Rescale to Spawning Biomass Units
@@ -198,22 +207,33 @@ while ((i<MaxIteration) && (HasConverged==0))
 {
   i <- i+1
   
-  # Compute unfished recruitment strength by population, 
-  # area, and gender for iteration i
-  #-----------------------------------------------------------------
-  a <- 1
-  for (p in 1:NPopulation) {
-    for (d in 1:NArea)
-      for (g in 1:NGender)
-      {   
-        R.tmp <- 0.0
-        for (k in 1:NArea)
-        {
-          R.tmp <- R.tmp + Recruitment.GenderFraction[p,k,g]*RecruitmentDistribution[p,k,d]*Recruitment.UnfishedR[p,k]
-        }
-        EquilibriumNumbersAtAge[i,p,d,g,a] <- R.tmp
-      }
+# Compute recruitment production by population and area for i=2
+#-----------------------------------------------------------------
+for (p in 1:NPopulation)
+  for (d in 1:NArea)
+  {
+    if (Recruitment.model[p,d] == 1)
+      parameters <- c(Recruitment.model[p,d],EquilibriumSpawningBiomass[(i-1),p,d,1], Recruitment.UnfishedR[p,d], Recruitment.steepness[p,d])
+    R.Iteration[i,p,d] <- StockRecruitment(EquilibriumSpawningBiomass[(i-1),p,d,1],parameters)
   }
+
+# Compute unfished recruitment strength by population, 
+# area, and gender for iteration i=2
+#-----------------------------------------------------------------
+a <- 1
+
+for (p in 1:NPopulation) {
+  for (d in 1:NArea)
+    for (g in 1:NGender)
+    {   
+      tmp <- 0.0
+      for (k in 1:NArea)
+      {
+        tmp <- tmp + Recruitment.GenderFraction[p,k,g]*RecruitmentDistribution[p,k,d]*R.Iteration[i,p,k]
+      }
+      EquilibriumNumbersAtAge[i,p,d,g,a] <- tmp
+    }
+}
   
   # Compute unfished numbers at age by population, area, and gender
   # for iteration i and true age indexes [a=2:(NAge-1)]
@@ -263,7 +283,7 @@ while ((i<MaxIteration) && (HasConverged==0))
         tmp <- 0.0
         for (a in 1:NAge)
         {
-          tmp <- tmp + EquilibriumNumbersAtAge[i,p,d,g,a]*MeanWeightSpawning[p,d,g,a]*MaturityProbabilityAtAge[p,d,g,a]*exp(-SpawningZFraction[p,d]*NaturalMortality[p,d,g,a])
+          tmp <- tmp + EquilibriumNumbersAtAge[i,p,d,g,a]*UnfishedMeanWeightSpawning[p,d,g,a]*MaturityProbabilityAtAge[p,d,g,a]*exp(-SpawningZFraction[p,d]*NaturalMortality[p,d,g,a])
         }   
         EquilibriumSpawningBiomass[i,p,d,g] <- tmp
         # Rescale to Spawning Biomass Units
@@ -311,6 +331,14 @@ while ((i<MaxIteration) && (HasConverged==0))
     print('Calculation of unfished equilibrium population numbers at age and spawning biomasses has converged at iteration:')
     print(FinalIteration)
   }
+  
+  if (i == MaxIteration)
+  {
+    print('_____________________________________________________________________________________________________')
+	print('Calculation of unfished equilibrium population numbers at age and spawning biomasses did not converge with distance:')
+	print(Distance)
+  }
+  
   
 }
 

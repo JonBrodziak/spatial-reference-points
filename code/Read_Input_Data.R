@@ -147,12 +147,37 @@ print("Population biomass units for output")
 print(OutputBiomassUnits)
 SkipLines <- SkipLines+2
 
+# Read the maximum value of fishing mortality for reference point calculations
+#-----------------------------------------------------------------------------------------------
+MaxF <- scan(InputFile, skip=SkipLines, n=1, quiet=T)
+print("Maximum fishing mortality for reference points")
+print(MaxF)
+SkipLines <- SkipLines+2
+
+# Read the mesh for fishing mortality (e.g., FMesh=0.01) used in reference point calculations
+#-----------------------------------------------------------------------------------------------
+FMesh <- scan(InputFile, skip=SkipLines, n=1, quiet=T)
+print("Fishing mortality mesh used for reference point calculations")
+print(FMesh)
+SkipLines <- SkipLines+2
+
+# Set number of grid points for calculating reference points
+#-----------------------------------------------------------------------------------------------
+NGrid <- floor(MaxF/FMesh) + 1
+
+# Set F grid for calculating reference points
+#-----------------------------------------------------------------------------------------------
+FGrid <- array(rep(0.0,NGrid),c(NGrid))
+FGrid <- seq(0.0,MaxF,FMesh)
+
+
 # Set array dimensions
 #-----------------------------------------------------------------------------------------------
 NYearPlusOne <- NYear+1
 DimAreaGender <- NArea*NGender
 DimIterationPopulationAreaGenderAge <- MaxIteration*NPopulation*NArea*NGender*NAge
 DimIterationPopulationAreaGender <- MaxIteration*NPopulation*NArea*NGender
+DimIterationPopulationArea <- MaxIteration*NPopulation*NArea
 DimFleetArea <- NFleet*NArea
 DimPopulationAreaGenderAge <- NPopulation*NArea*NGender*NAge
 DimPopulationFleetGenderAge <- NPopulation*NFleet*NGender*NAge
@@ -485,29 +510,6 @@ if (Recruitment.model[1,1] == 1) {
 	}
 	SkipLines <- SkipLines+NArea+1
 }
-
-# Read the maximum value of fishing mortality for reference point calculations
-#-----------------------------------------------------------------------------------------------
-MaxF <- scan(InputFile, skip=SkipLines, n=1, quiet=T)
-print("Maximum fishing mortality for reference points")
-print(MaxF)
-SkipLines <- SkipLines+2
-
-# Read the mesh for fishing mortality (e.g., FMesh=0.01) used in reference point calculations
-#-----------------------------------------------------------------------------------------------
-FMesh <- scan(InputFile, skip=SkipLines, n=1, quiet=T)
-print("Fishing mortality mesh used for reference point calculations")
-print(FMesh)
-SkipLines <- SkipLines+2
-
-# Set number of grid points for calculating reference points
-#-----------------------------------------------------------------------------------------------
-NGrid <- floor(MaxF/FMesh) + 1
-
-# Set F grid for calculating reference points
-#-----------------------------------------------------------------------------------------------
-FGrid <- array(rep(0.0,NGrid),c(NGrid))
-FGrid <- seq(0.0,MaxF,FMesh)
 
 # Read 2D array for equilibrium fishing mortality parameters to initialize model
 #-----------------------------------------------------------------------------------------------

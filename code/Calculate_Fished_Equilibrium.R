@@ -6,7 +6,7 @@
 ################################################################################################
   # Write unfished equilibrium results to output file
   #-----------------------------------------------------------------
-  sink(file=OutputFile,append=TRUE,split=TRUE)
+  sink(file=OutputFile,append=TRUE,type="output")
   
 # Set equilibrium fishing mortality at age 
 #-----------------------------------------------------------------
@@ -14,18 +14,18 @@ print('_________________________________________________________________________
 print('Calculating fished equilibrium population numbers at age and spawning biomasses ...')
 print('_____________________________________________________________________________________________________')
 
-# Write unfished equilibrium results to output file
-#-----------------------------------------------------------------
-sink(file=OutputFile,append=TRUE,type="output")
-
 # ITERATION 1
 
 # Compute initial estimates of fished equilibrium numbers at age 
 # and equilibrium spawning biomasses by population, area, and 
 # gender where iteration i=1 and age-0 index [a=1]
 #-----------------------------------------------------------------
+
 i <- 1
 a <- 1
+
+R.Iteration[i,,] <- Recruitment.UnfishedR
+
 for (p in 1:NPopulation)
   for (d in 1:NArea)
     for (g in 1:NGender)
@@ -33,7 +33,7 @@ for (p in 1:NPopulation)
       tmp <- 0.0
       for (k in 1:NArea)
       {
-        tmp <- tmp + Recruitment.GenderFraction[p,k,g]*RecruitmentDistribution[p,k,d]*Recruitment.UnfishedR[p,k]
+        tmp <- tmp + Recruitment.GenderFraction[p,k,g]*RecruitmentDistribution[p,k,d]*R.Iteration[i,p,k]
       }
       EquilibriumNumbersAtAge[i,p,d,g,a] <- tmp
     }
@@ -70,7 +70,7 @@ for (p in 1:NPopulation)
     {
       for (a in 1:NAge)
       {
-        tmp <- EquilibriumNumbersAtAge[i,p,d,g,a]*MeanWeightSpawning[p,d,g,a]*MaturityProbabilityAtAge[p,d,g,a]*exp(-SpawningZFraction[p,d]*(NaturalMortality[p,d,g,a]+EquilibriumFishingMortalityAtAge[p,d,g,a]))
+        tmp <- EquilibriumNumbersAtAge[i,p,d,g,a]*FishedMeanWeightSpawning[p,d,g,a]*MaturityProbabilityAtAge[p,d,g,a]*exp(-SpawningZFraction[p,d]*(NaturalMortality[p,d,g,a]+EquilibriumFishingMortalityAtAge[p,d,g,a]))
         EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g] + tmp
       }
       # Rescale to Spawning Biomass Units
@@ -105,7 +105,7 @@ for (p in 1:NPopulation)
   {
     if (Recruitment.model[p,d] == 1)
       parameters <- c(Recruitment.model[p,d],UnfishedSpawningBiomass[p,d,1], Recruitment.UnfishedR[p,d], Recruitment.steepness[p,d])
-    EquilibriumRecruitmentProduction[p,d] <- StockRecruitment(EquilibriumSpawningBiomass[(i-1),p,d,1],parameters)
+    R.Iteration[i,p,k] <- StockRecruitment(EquilibriumSpawningBiomass[(i-1),p,d,1],parameters)
   }
 
 # Compute fished recruitment strength by population, 
@@ -119,7 +119,7 @@ for (p in 1:NPopulation) {
       tmp <- 0.0
       for (k in 1:NArea)
       {
-        tmp <- tmp + Recruitment.GenderFraction[p,k,g]*RecruitmentDistribution[p,k,d]*EquilibriumRecruitmentProduction[p,k]
+        tmp <- tmp + Recruitment.GenderFraction[p,k,g]*RecruitmentDistribution[p,k,d]*R.Iteration[i,p,k]
       }
       EquilibriumNumbersAtAge[i,p,d,g,a] <- tmp
     }
@@ -174,7 +174,7 @@ for (p in 1:NPopulation)
       tmp <- 0.0
       for (a in 1:NAge)
       {
-        tmp <- tmp + EquilibriumNumbersAtAge[i,p,d,g,a]*MeanWeightSpawning[p,d,g,a]*MaturityProbabilityAtAge[p,d,g,a]*exp(-SpawningZFraction[p,d]*(NaturalMortality[p,d,g,a]+EquilibriumFishingMortalityAtAge[p,d,g,a]))
+        tmp <- tmp + EquilibriumNumbersAtAge[i,p,d,g,a]*FishedMeanWeightSpawning[p,d,g,a]*MaturityProbabilityAtAge[p,d,g,a]*exp(-SpawningZFraction[p,d]*(NaturalMortality[p,d,g,a]+EquilibriumFishingMortalityAtAge[p,d,g,a]))
       }   
       EquilibriumSpawningBiomass[i,p,d,g] <- tmp
       # Rescale to Spawning Biomass Units
@@ -213,7 +213,7 @@ while ((i<MaxIteration) && (HasConverged==0))
       {
 	  if (Recruitment.model[p,d] == 1)
 	    parameters <- c(Recruitment.model[p,d],UnfishedSpawningBiomass[p,d,1], Recruitment.UnfishedR[p,d], Recruitment.steepness[p,d])
-      EquilibriumRecruitmentProduction[p,d] <- StockRecruitment(EquilibriumSpawningBiomass[(i-1),p,d,1],parameters)
+      R.Iteration[i,p,k] <- StockRecruitment(EquilibriumSpawningBiomass[(i-1),p,d,1],parameters)
       }
   
   # Compute fished recruitment strength by population, 
@@ -227,7 +227,7 @@ while ((i<MaxIteration) && (HasConverged==0))
         tmp <- 0.0
         for (k in 1:NArea)
         {
-          tmp <- tmp + Recruitment.GenderFraction[p,k,g]*RecruitmentDistribution[p,k,d]*EquilibriumRecruitmentProduction[p,k]
+          tmp <- tmp + Recruitment.GenderFraction[p,k,g]*RecruitmentDistribution[p,k,d]*R.Iteration[i,p,k]
         }
         EquilibriumNumbersAtAge[i,p,d,g,a] <- tmp
       }
@@ -282,7 +282,7 @@ while ((i<MaxIteration) && (HasConverged==0))
         tmp <- 0.0
         for (a in 1:NAge)
         {
-          tmp <- tmp + EquilibriumNumbersAtAge[i,p,d,g,a]*MeanWeightSpawning[p,d,g,a]*MaturityProbabilityAtAge[p,d,g,a]*exp(-SpawningZFraction[p,d]*(NaturalMortality[p,d,g,a]+EquilibriumFishingMortalityAtAge[p,d,g,a]))
+          tmp <- tmp + EquilibriumNumbersAtAge[i,p,d,g,a]*FishedMeanWeightSpawning[p,d,g,a]*MaturityProbabilityAtAge[p,d,g,a]*exp(-SpawningZFraction[p,d]*(NaturalMortality[p,d,g,a]+EquilibriumFishingMortalityAtAge[p,d,g,a]))
         }   
         EquilibriumSpawningBiomass[i,p,d,g] <- tmp
         # Rescale to Spawning Biomass Units
@@ -330,6 +330,13 @@ while ((i<MaxIteration) && (HasConverged==0))
     print(FinalIteration)
   }
   
+  if (i == MaxIteration)
+  {
+    print('_____________________________________________________________________________________________________')
+	print('Calculation of fished equilibrium population numbers at age and spawning biomasses did not converge with distance:')
+	print(Distance)
+  }
+    
 }
 
 # END WHILE LOOP
