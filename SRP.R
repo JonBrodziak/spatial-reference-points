@@ -62,7 +62,7 @@ source(paste(source.folder,'Write_Input_Data.R',sep=""))
 source(paste(source.folder,'Read_Input_Data.R',sep=""))
 
 ################################################################################################
-# (1.3) INITIALIZE POPULATION CLASS
+# (1.3) INITIALIZE UNFISHED POPULATION EQUILIBRIUM CLASS
 ################################################################################################
 
 # Compute maturity probabilities at age by gender, area, and population
@@ -109,12 +109,8 @@ UnfishedMeanWeightSpawning <- MeanWeightSpawning
 UnfishedMeanWeightCatch <- MeanWeightCatch
 UnfishedMeanWeightSurvey <- MeanWeightSurvey
 
-# Set stock-recruitment submodel parameters by gender, area, and population
-#-----------------------------------------------------------------------------------------------
-Recruitment.LogUnfishedR <- log(Recruitment.UnfishedR)
-
 ################################################################################################
-# (1.4) INITIALIZE OBSERVATION CLASS
+# (1.4) INITIALIZE FISHED EQUILIBRIUM POPULATION CLASS
 ################################################################################################
 
 # Calculate equilibrium fishery selectivity at age by gender, area (fleet), and population
@@ -135,11 +131,58 @@ SurveySelectivityAtAge <- array(rep(1.0,DimPopulationSurveyGenderAge),c(NPopulat
 
 source(paste(source.folder,'Calculate_Survey_Selectivity_At_Age.R',sep=""))
 
+# Dimension arrays
+#-----------------------------------------------------------------------------------------------
+EquilibriumFishingMortalityAtAge <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
+EquilibriumTotalMortalityAtAge <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
+
+# Calculate equilibrium fishing mortality at age
+#-----------------------------------------------------------------
+for (p in 1:NPopulation)
+  for (d in 1:NArea)
+    for (g in 1:NGender)
+      for (a in 1:NAge) {
+        EquilibriumFishingMortalityAtAge[p,d,g,a] <- EquilibriumFisherySelectivityAtAge[p,d,g,a]*SimEquilibriumFishingMortality[d,d]
+        EquilibriumTotalMortalityAtAge[p,d,g,a] <- NaturalMortality[p,d,g,a]+EquilibriumFishingMortalityAtAge[p,d,g,a]
+      }
+
+source(paste(source.folder,'Calculate_Fished_Equilibrium_Mean_Size_At_NAge.R',sep=""))
+
+# Store fished equilibrium mean lengths and mean weights for the plus group, all true ages are the same
+#-----------------------------------------------------------------------------------------------
+FishedMeanLengthStartOfYear <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
+FishedMeanLengthSpawning <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
+FishedMeanLengthCatch <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
+FishedMeanLengthSurvey <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
+FishedMeanWeightStartOfYear <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
+FishedMeanWeightSpawning <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
+FishedMeanWeightCatch <- array(rep(0.0,DimPopulationFleetGenderAge),c(NPopulation,NFleet,NGender,NAge))
+FishedMeanWeightSurvey <- array(rep(0.0,DimPopulationSurveyGenderAge),c(NPopulation,NSurvey,NGender,NAge))
+
+FishedMeanLengthStartOfYear <- MeanLengthStartOfYear
+FishedMeanLengthSpawning <- MeanLengthSpawning
+FishedMeanLengthCatch <- MeanLengthCatch
+FishedMeanLengthSurvey <- MeanLengthSurvey
+FishedMeanWeightStartOfYear <- MeanWeightStartOfYear
+FishedMeanWeightSpawning <- MeanWeightSpawning
+FishedMeanWeightCatch <- MeanWeightCatch
+FishedMeanWeightSurvey <- MeanWeightSurvey
+
+# Set stock-recruitment submodel parameters by gender, area, and population
+#-----------------------------------------------------------------------------------------------
+Recruitment.LogUnfishedR <- log(Recruitment.UnfishedR)
+
 ################################################################################################
 # (1.5) INITIALIZE ENVIRONMENT CLASS
 ################################################################################################
 # Placeholder
 #-----------------------------------------------------------------------------------------------
+
+################################################################################################
+# WRITE INPUT DATA TO FILE
+################################################################################################
+
+Write_Input_Data(OutputFile)
 
 ################################################################################################
 #
@@ -157,9 +200,10 @@ source(paste(source.folder,'Calculate_Survey_Selectivity_At_Age.R',sep=""))
 #
 # Dimension arrays
 #-----------------------------------------------------------------------------------------------
- EquilibriumNumbersAtAge <- array(rep(0.0,DimIterationPopulationAreaGenderAge),c(MaxIteration,NPopulation,NArea,NGender,NAge)) 
- EquilibriumSpawningBiomass <- array(rep(0.0,DimIterationPopulationAreaGender),c(MaxIteration,NPopulation,NArea,NGender))
-
+EquilibriumNumbersAtAge <- array(rep(0.0,DimIterationPopulationAreaGenderAge),c(MaxIteration,NPopulation,NArea,NGender,NAge)) 
+EquilibriumSpawningBiomass <- array(rep(0.0,DimIterationPopulationAreaGender),c(MaxIteration,NPopulation,NArea,NGender))
+R.Iteration <- array(rep(0.0,DimIterationPopulationArea),c(MaxIteration,NPopulation,NArea))
+ 
 # Calculate unfished equilibrium spawning biomasses
 #-----------------------------------------------------------------------------------------------
 
@@ -180,51 +224,12 @@ source(paste(source.folder,'Calculate_Unfished_Equilibrium.R',sep=""))
 #-----------------------------------------------------------------
 EquilibriumNumbersAtAge <- array(rep(0.0,DimIterationPopulationAreaGenderAge),c(MaxIteration,NPopulation,NArea,NGender,NAge)) 
 EquilibriumSpawningBiomass <- array(rep(0.0,DimIterationPopulationAreaGender),c(MaxIteration,NPopulation,NArea,NGender))
-EquilibriumFishingMortalityAtAge <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
-EquilibriumTotalMortalityAtAge <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
+R.Iteration <- array(rep(0.0,DimIterationPopulationArea),c(MaxIteration,NPopulation,NArea))
 EquilibriumRecruitmentProduction <- array(rep(0.0,DimPopulationArea),c(NPopulation,NArea))
-
-# Calculate equilibrium fishing mortality at age
-#-----------------------------------------------------------------
-for (p in 1:NPopulation)
-  for (d in 1:NArea)
-    for (g in 1:NGender)
-      for (a in 1:(NAge)) {
-        EquilibriumFishingMortalityAtAge[p,d,g,a] <- EquilibriumFisherySelectivityAtAge[p,d,g,a]*SimEquilibriumFishingMortality[d,d]
-        EquilibriumTotalMortalityAtAge[p,d,g,a] <- NaturalMortality[p,k,g,a]+EquilibriumFishingMortalityAtAge[p,k,g,a]
-      }
-
-source(paste(source.folder,'Calculate_Fished_Equilibrium_Mean_Size_At_NAge.R',sep=""))
-
-# Store fished equilibrium mean lengths and mean weights at age
-#-----------------------------------------------------------------------------------------------
-FishedMeanLengthStartOfYear <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
-FishedMeanLengthSpawning <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
-FishedMeanLengthCatch <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
-FishedMeanLengthSurvey <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
-FishedMeanWeightStartOfYear <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
-FishedMeanWeightSpawning <- array(rep(0.0,DimPopulationAreaGenderAge),c(NPopulation,NArea,NGender,NAge))
-FishedMeanWeightCatch <- array(rep(0.0,DimPopulationFleetGenderAge),c(NPopulation,NFleet,NGender,NAge))
-FishedMeanWeightSurvey <- array(rep(0.0,DimPopulationSurveyGenderAge),c(NPopulation,NSurvey,NGender,NAge))
-
-FishedMeanLengthStartOfYear <- MeanLengthStartOfYear
-FishedMeanLengthSpawning <- MeanLengthSpawning
-FishedMeanLengthCatch <- MeanLengthCatch
-FishedMeanLengthSurvey <- MeanLengthSurvey
-FishedMeanWeightStartOfYear <- MeanWeightStartOfYear
-FishedMeanWeightSpawning <- MeanWeightSpawning
-FishedMeanWeightCatch <- MeanWeightCatch
-FishedMeanWeightSurvey <- MeanWeightSurvey
 
 # Calculate fished equilibrium numbers at age 
 #-----------------------------------------------------------------
 source(paste(source.folder,'Calculate_Fished_Equilibrium.R',sep=""))
-
-################################################################################################
-# WRITE INPUT DATA TO FILE
-################################################################################################
-
-Write_Input_Data(OutputFile)
 
 ################################################################################################
 #
