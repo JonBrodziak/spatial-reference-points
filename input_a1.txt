@@ -25,13 +25,17 @@
 # NSeason, the number of seasons
 1
 # MaxIteration, the maximum number of iterations to compute unfished and fished equilibrium
-100
-# EquilibriumConvergenceCriterion, the convergence criterion for equilibrium spawning biomasses
-0.0001
+250
+# EquilibriumConvergenceCriterion, the convergence criterion for equilibrium spawning biomasses (0.001 = 1 kg)
+0.001
 # OutputNumbersUnits, the units for output population numbers (numbers of fish)
 1000
-# OutputBiomassUnits, the units for output population numbers (kg of fish)
+# OutputBiomassUnits, the units for output population biomass (1000 = 1 mt of fish)
 1000
+# MaxF, the maximum F for reference point calculations
+3.0
+# FMesh, the fishing mortality mesh for reference point calculations
+0.01
 # StartZFraction, the array for timing of start of year by population and area
 0 0
 0 0
@@ -113,10 +117,6 @@
 # Recruitment.sigmaR, the stock-recruitment sigmaR parameters by population and area
 0.5 0.5
 0.5 0.5
-# MaxF, the maximum F for reference point calculations
-3.0
-# FMesh, the fishing mortality mesh for reference point calculations
-0.01
 # EquilibriumFishingMortality, the equilibrium fishing mortality submodel parameters by fleet and area
 0.1 0.0
 0.0 0.1
