@@ -4,7 +4,7 @@
 # of the MAS project.
 # Jon Brodziak, PIFSC, jon.brodziak@noaa.gov 13-Mar-2018
 ################################################################################################
-  # Write unfished equilibrium results to output file
+  # Write fished equilibrium results to output file
   #-----------------------------------------------------------------
   sink(file=OutputFile,append=TRUE,type="output")
   
@@ -18,7 +18,7 @@ print('_________________________________________________________________________
 
 # Compute initial estimates of fished equilibrium numbers at age 
 # and equilibrium spawning biomasses by population, area, and 
-# gender where iteration i=1 and age-0 index [a=1]
+# gender where iteration i=1
 #-----------------------------------------------------------------
 
 i <- 1
@@ -105,7 +105,7 @@ for (p in 1:NPopulation)
   {
     if (Recruitment.model[p,d] == 1)
       parameters <- c(Recruitment.model[p,d],UnfishedSpawningBiomass[p,d,1], Recruitment.UnfishedR[p,d], Recruitment.steepness[p,d])
-    R.Iteration[i,p,k] <- StockRecruitment(EquilibriumSpawningBiomass[(i-1),p,d,1],parameters)
+    R.Iteration[i,p,d] <- StockRecruitment(EquilibriumSpawningBiomass[(i-1),p,d,1],parameters)
   }
 
 # Compute fished recruitment strength by population, 
@@ -213,7 +213,7 @@ while ((i<MaxIteration) && (HasConverged==0))
       {
 	  if (Recruitment.model[p,d] == 1)
 	    parameters <- c(Recruitment.model[p,d],UnfishedSpawningBiomass[p,d,1], Recruitment.UnfishedR[p,d], Recruitment.steepness[p,d])
-      R.Iteration[i,p,k] <- StockRecruitment(EquilibriumSpawningBiomass[(i-1),p,d,1],parameters)
+      R.Iteration[i,p,d] <- StockRecruitment(EquilibriumSpawningBiomass[(i-1),p,d,1],parameters)
       }
   
   # Compute fished recruitment strength by population, 

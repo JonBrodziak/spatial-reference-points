@@ -57,10 +57,7 @@ for (p in 1:NPopulation)
       }		  
 	  }
       tmp <- tmp*(1.0-exp(-NaturalMortality[p,d,g,NAge]))
-	  if (RecAge == 0)
-      MeanLengthStartOfYear[p,d,g,NAge] <- tmp/(1.0-exp(-NaturalMortality[p,d,g,NAge]*(MaxPlusGroupAge-NAge+1)))
-    else if (RecAge == 1)
-	    MeanLengthStartOfYear[p,d,g,NAge] <- tmp/(1.0-exp(-NaturalMortality[p,d,g,NAge]*(MaxPlusGroupAge-NAge)))
+      MeanLengthStartOfYear[p,d,g,NAge] <- tmp/(1.0-exp(-NaturalMortality[p,d,g,NAge]*(MaxPlusGroupAge-NAge)))
     }
       
 # Compute mean length during spawning season age by gender, area, and population
@@ -118,10 +115,7 @@ for (p in 1:NPopulation)
         }		  
       }
       tmp <- tmp*(1.0-exp(-NaturalMortality[p,d,g,NAge]))
-      if (RecAge == 0)
-        MeanLengthSpawning[p,d,g,NAge] <- tmp/(1.0-exp(-NaturalMortality[p,d,g,NAge]*(MaxPlusGroupAge-NAge+1)))
-      else if (RecAge == 1)
-        MeanLengthSpawning[p,d,g,NAge] <- tmp/(1.0-exp(-NaturalMortality[p,d,g,NAge]*(MaxPlusGroupAge-NAge)))
+      MeanLengthSpawning[p,d,g,NAge] <- tmp/(1.0-exp(-NaturalMortality[p,d,g,NAge]*(MaxPlusGroupAge-NAge)))
     }
 
 # Compute mean length of fishery catch at age by gender, fleet, and population
@@ -179,10 +173,7 @@ for (p in 1:NPopulation)
         }		  
       }
       tmp <- tmp*(1.0-exp(-NaturalMortality[p,FleetArea[v],g,NAge]))
-      if (RecAge == 0)
-        MeanLengthCatch[p,FleetArea[v],g,NAge] <- tmp/(1.0-exp(-NaturalMortality[p,FleetArea[v],g,NAge]*(MaxPlusGroupAge-NAge+1)))
-      else if (RecAge == 1)
-        MeanLengthCatch[p,FleetArea[v],g,NAge] <- tmp/(1.0-exp(-NaturalMortality[p,FleetArea[v],g,NAge]*(MaxPlusGroupAge-NAge)))
+      MeanLengthCatch[p,FleetArea[v],g,NAge] <- tmp/(1.0-exp(-NaturalMortality[p,FleetArea[v],g,NAge]*(MaxPlusGroupAge-NAge)))
     }
 
 # Compute mean length of survey catch at age by gender, survey, and population
@@ -240,10 +231,7 @@ for (p in 1:NPopulation)
         }		  
       }
       tmp <- tmp*(1.0-exp(-NaturalMortality[p,SurveyArea[I],g,NAge]))
-      if (RecAge == 0)
-        MeanLengthSurvey[p,SurveyArea[I],g,NAge] <- tmp/(1.0-exp(-NaturalMortality[p,SurveyArea[I],g,NAge]*(MaxPlusGroupAge-NAge+1)))
-      else if (RecAge == 1)
-        MeanLengthSurvey[p,SurveyArea[I],g,NAge] <- tmp/(1.0-exp(-NaturalMortality[p,SurveyArea[I],g,NAge]*(MaxPlusGroupAge-NAge)))
+      MeanLengthSurvey[p,SurveyArea[I],g,NAge] <- tmp/(1.0-exp(-NaturalMortality[p,SurveyArea[I],g,NAge]*(MaxPlusGroupAge-NAge)))
     }
 
 # Compute unfished equilibrium mean weights at age at start of year, spawning, catch, and survey

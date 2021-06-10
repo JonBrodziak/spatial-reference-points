@@ -41,14 +41,14 @@ for (p in 1:NPopulation)
 print('_____________________________________________________________________________________________________')
 
 #-----------------------------------------------------------------------------------------------
-# (3.1.3)  FISHING MORTALITY
+# (3.1.3)  ASSESSMENT FISHING MORTALITY
 #-----------------------------------------------------------------------------------------------
-print('(3.1.3) FISHING MORTALITY (Year Fleet Area_A Area_B)')
+print('(3.1.3) ASSESSMENT FISHING MORTALITY (Year Fleet Area_A Area_B)')
 print('_____________________________________________________________________________________________________')
 for (v in 1:NFleet)
   for (y in 1:NYear)
   {
-    print(c("Year=",y,"Fleet=",v,"By Area",SimFishingMortality[y,FleetArea[v],]))
+    print(c("Year=",y,"Fleet=",v,"By Area",AssessmentFishingMortality[y,FleetArea[v],]))
   }
 print('_____________________________________________________________________________________________________')
 

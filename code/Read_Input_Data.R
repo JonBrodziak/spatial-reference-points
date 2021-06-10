@@ -165,15 +165,11 @@ SkipLines <- SkipLines+2
 #-----------------------------------------------------------------------------------------------
 NGrid <- floor(MaxF/FMesh) + 1
 
-# Set F grid for calculating reference points
-#-----------------------------------------------------------------------------------------------
-FGrid <- array(rep(0.0,NGrid),c(NGrid))
-FGrid <- seq(0.0,MaxF,FMesh)
-
-
+################################################################################################
 # Set array dimensions
 #-----------------------------------------------------------------------------------------------
 NYearPlusOne <- NYear+1
+DimGrid <- NGrid                                                                                                         
 DimAreaGender <- NArea*NGender
 DimIterationPopulationAreaGenderAge <- MaxIteration*NPopulation*NArea*NGender*NAge
 DimIterationPopulationAreaGender <- MaxIteration*NPopulation*NArea*NGender
@@ -203,6 +199,12 @@ DimYearFleetAreaGenderAge <- NYear*NFleet*NArea*NGender*NAge
 DimYearAreaGenderAge <- NYear*NArea*NGender*NAge
 DimYearFleetArea <- NYear*NFleet*NArea
 DimYearArea <- NYear*NArea
+################################################################################################
+
+# Set F grid by area for calculating reference points
+#-----------------------------------------------------------------------------------------------
+FGrid <- array(rep(0.0,DimGrid),c(NGrid))
+FGrid <- seq(0.0,MaxF,FMesh)
 
 # Read 2D array for timing of start of year by area and population
 #-----------------------------------------------------------------------------------------------
@@ -511,24 +513,24 @@ if (Recruitment.model[1,1] == 1) {
 	SkipLines <- SkipLines+NArea+1
 }
 
-# Read 2D array for equilibrium fishing mortality parameters to initialize model
+# Read 2D array for fished equilibrium fishing mortality parameters to initialize model
 #-----------------------------------------------------------------------------------------------
 tmp <- scan(InputFile, nmax=DimFleetArea, skip=SkipLines, quiet=T)
-SimEquilibriumFishingMortality <- array(tmp,c(NFleet,NArea))
+FishedEquilibriumFishingMortality <- array(tmp,c(NFleet,NArea))
 for (p in 1:NPopulation) {
-  print(c("Equilibrium fishing mortality parameters by area for population",p))
-  print(SimEquilibriumFishingMortality[p,]) 
+  print(c("Fished equilibrium fishing mortality parameters by area for population",p))
+  print(FishedEquilibriumFishingMortality[p,]) 
 }
 SkipLines <- SkipLines+NArea+1
 #
 # Read 3D array for fishing mortality parameters in the assessment time horizon
 #-----------------------------------------------------------------------------------------------
 tmp <- scan(InputFile, nmax=DimYearFleetArea, skip=SkipLines, quiet=T)
-SimFishingMortality <- array(tmp,c(NYear,NFleet,NArea))
+AssessmentFishingMortality <- array(tmp,c(NYear,NFleet,NArea))
 for (v in 1:NFleet)
   for (d in 1:NArea) {
-    print(c("Fishing mortality parameters by year for fleet",v,"in area",d))
-    print(SimFishingMortality[,v,d]) 
+    print(c("Assessment fishing mortality parameters by year for fleet",v,"in area",d))
+    print(AssessmentFishingMortality[,v,d]) 
 }
 SkipLines <- SkipLines+NArea+1
 

@@ -66,7 +66,7 @@ for (y in 1:NYear)
         {          
           TotalMortality[y,p,d,g,a] <- NaturalMortality[p,d,g,a]
           for (v in 1:NFleet)
-            TotalMortality[y,p,FleetArea[v],g,a] <- TotalMortality[y,p,FleetArea[v],g,a]+SimFishingMortality[y,FleetArea[v],d]*FisherySelectivityAtAge[p,FleetArea[v],g,a]
+            TotalMortality[y,p,FleetArea[v],g,a] <- TotalMortality[y,p,FleetArea[v],g,a]+AssessmentFishingMortality[y,FleetArea[v],d]*FisherySelectivityAtAge[p,FleetArea[v],g,a]
         }
   
   # (2.3.5) CALCULATE SPAWNING NUMBERS AT AGE AND SPAWNING BIOMASS FOR YEAR y
@@ -151,7 +151,7 @@ for (y in 1:NYear)
           for (g in 1:NGender)
             for (a in 1:NAge)
             {
-              FisheryCatchNumbersAtAgeByPopulation[y,p,FleetArea[v],d,g,a] <- NumbersAtAge[y,p,d,g,a]*SimFishingMortality[y,FleetArea[v],d]*FisherySelectivityAtAge[p,FleetArea[v],g,a]
+              FisheryCatchNumbersAtAgeByPopulation[y,p,FleetArea[v],d,g,a] <- NumbersAtAge[y,p,d,g,a]*AssessmentFishingMortality[y,FleetArea[v],d]*FisherySelectivityAtAge[p,FleetArea[v],g,a]
               FisheryCatchNumbersAtAgeByPopulation[y,p,v,d,g,a] <-  FisheryCatchNumbersAtAgeByPopulation[y,p,FleetArea[v],d,g,a]*(1.0-exp(-TotalMortality[y,p,d,g,a]))/TotalMortality[y,p,d,g,a]
             }
   
@@ -348,16 +348,16 @@ for (y in 1:NYear)
           tmp1 <- NumbersAtAge[(y-1),p,d,g,(NAge-1)]*exp(-TotalMortality[(y-1),p,d,g,(NAge-1)])
           tmp2 <- NumbersAtAge[(y-1),p,d,g,NAge]*exp(-TotalMortality[(y-1),p,d,g,NAge])
 		  
-          tmp3 <- tmp1*UnfishedMeanLengthStartOfYear[p,d,g,NAge]+tmp2*AssessmentMeanLengthStartOfYear[(y-1),p,d,g,NAge]
+          tmp3 <- tmp1*FishedMeanLengthStartOfYear[p,d,g,NAge]+tmp2*AssessmentMeanLengthStartOfYear[(y-1),p,d,g,NAge]
           AssessmentMeanLengthStartOfYear[y,p,d,g,NAge] <- tmp3/(tmp1+tmp2)
 		  
-          tmp3 <- tmp1*UnfishedMeanLengthSpawning[p,d,g,NAge]+tmp2*AssessmentMeanLengthSpawning[(y-1),p,d,g,NAge]
+          tmp3 <- tmp1*FishedMeanLengthSpawning[p,d,g,NAge]+tmp2*AssessmentMeanLengthSpawning[(y-1),p,d,g,NAge]
           AssessmentMeanLengthSpawning[y,p,d,g,NAge] <- tmp3/(tmp1+tmp2)
 		  
-          tmp3 <- tmp1*UnfishedMeanLengthCatch[p,d,g,NAge]+tmp2*AssessmentMeanLengthCatch[(y-1),p,d,g,NAge]
+          tmp3 <- tmp1*FishedMeanLengthCatch[p,d,g,NAge]+tmp2*AssessmentMeanLengthCatch[(y-1),p,d,g,NAge]
           AssessmentMeanLengthCatch[y,p,d,g,NAge] <- tmp3/(tmp1+tmp2)
 		  
-          tmp3 <- tmp1*UnfishedMeanLengthSurvey[p,d,g,NAge]+tmp2*AssessmentMeanLengthSurvey[(y-1),p,d,g,NAge]
+          tmp3 <- tmp1*FishedMeanLengthSurvey[p,d,g,NAge]+tmp2*AssessmentMeanLengthSurvey[(y-1),p,d,g,NAge]
           AssessmentMeanLengthSurvey[y,p,d,g,NAge] <- tmp3/(tmp1+tmp2) 
        }
 

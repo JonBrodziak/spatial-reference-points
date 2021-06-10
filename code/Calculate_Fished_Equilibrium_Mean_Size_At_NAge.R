@@ -6,7 +6,7 @@
 # for the plus group, which is stored in array position NAge
 # using the MaxPlusGroupAge adjustment
 #-----------------------------------------------------------------
-# MeanLengthStartOfYear
+# MeanLengthStartOfYear for NAge
 for (p in 1:NPopulation)
   for (d in 1:NArea)
     for (g in 1:NGender) 
@@ -31,13 +31,10 @@ for (p in 1:NPopulation)
         }		  
       }
       tmp <- tmp*(1.0-exp(-EquilibriumTotalMortalityAtAge[p,d,g,NAge]))
-      if (RecAge == 0)
-        MeanLengthStartOfYear[p,d,g,NAge] <- tmp/(1.0-exp(-EquilibriumTotalMortalityAtAge[p,d,g,NAge]*(MaxPlusGroupAge-NAge+1)))
-      else if (RecAge == 1)
-        MeanLengthStartOfYear[p,d,g,NAge] <- tmp/(1.0-exp(-EquilibriumTotalMortalityAtAge[p,d,g,NAge]*(MaxPlusGroupAge-NAge)))
+      MeanLengthStartOfYear[p,d,g,NAge] <- tmp/(1.0-exp(-EquilibriumTotalMortalityAtAge[p,d,g,NAge]*(MaxPlusGroupAge-NAge)))
     }
 
-# MeanLengthSpawning
+# MeanLengthSpawning for NAge
 for (p in 1:NPopulation)
   for (d in 1:NArea)
     for (g in 1:NGender) 
@@ -62,13 +59,10 @@ for (p in 1:NPopulation)
         }		  
       }
       tmp <- tmp*(1.0-exp(-EquilibriumTotalMortalityAtAge[p,d,g,NAge]))
-      if (RecAge == 0)
-        MeanLengthSpawning[p,d,g,NAge] <- tmp/(1.0-exp(-EquilibriumTotalMortalityAtAge[p,d,g,NAge]*(MaxPlusGroupAge-NAge+1)))
-      else if (RecAge == 1)
-        MeanLengthSpawning[p,d,g,NAge] <- tmp/(1.0-exp(-EquilibriumTotalMortalityAtAge[p,d,g,NAge]*(MaxPlusGroupAge-NAge)))
+      MeanLengthSpawning[p,d,g,NAge] <- tmp/(1.0-exp(-EquilibriumTotalMortalityAtAge[p,d,g,NAge]*(MaxPlusGroupAge-NAge)))
     }
 
-# MeanLengthCatch
+# MeanLengthCatch for NAge
 for (p in 1:NPopulation)
   for (v in 1:NFleet)
     for (g in 1:NGender) 
@@ -93,13 +87,10 @@ for (p in 1:NPopulation)
         }		  
       }
       tmp <- tmp*(1.0-exp(-EquilibriumTotalMortalityAtAge[p,FleetArea[v],g,NAge]))
-      if (RecAge == 0)
-        MeanLengthCatch[p,FleetArea[v],g,NAge] <- tmp/(1.0-exp(-EquilibriumTotalMortalityAtAge[p,FleetArea[v],g,NAge]*(MaxPlusGroupAge-NAge+1)))
-      else if (RecAge == 1)
-        MeanLengthCatch[p,FleetArea[v],g,NAge] <- tmp/(1.0-exp(-EquilibriumTotalMortalityAtAge[p,FleetArea[v],g,NAge]*(MaxPlusGroupAge-NAge)))
+      MeanLengthCatch[p,FleetArea[v],g,NAge] <- tmp/(1.0-exp(-EquilibriumTotalMortalityAtAge[p,FleetArea[v],g,NAge]*(MaxPlusGroupAge-NAge)))
     }
 
-# MeanLengthSurvey
+# MeanLengthSurvey for NAge
 for (p in 1:NPopulation)
   for (I in 1:NSurvey)
     for (g in 1:NGender) 
@@ -124,13 +115,10 @@ for (p in 1:NPopulation)
         }		  
       }
       tmp <- tmp*(1.0-exp(-EquilibriumTotalMortalityAtAge[p,SurveyArea[I],g,NAge]))
-      if (RecAge == 0)
-        MeanLengthSurvey[p,SurveyArea[I],g,NAge] <- tmp/(1.0-exp(-EquilibriumTotalMortalityAtAge[p,SurveyArea[I],g,NAge]*(MaxPlusGroupAge-NAge+1)))
-      else if (RecAge == 1)
-        MeanLengthSurvey[p,SurveyArea[I],g,NAge] <- tmp/(1.0-exp(-EquilibriumTotalMortalityAtAge[p,SurveyArea[I],g,NAge]*(MaxPlusGroupAge-NAge)))
+      MeanLengthSurvey[p,SurveyArea[I],g,NAge] <- tmp/(1.0-exp(-EquilibriumTotalMortalityAtAge[p,SurveyArea[I],g,NAge]*(MaxPlusGroupAge-NAge)))
     }
 
-# Compute fished equilibrium mean weights of the plus group for the start of year, 
+# Compute fished equilibrium mean weights of the plus group (NAge) for the start of year, 
 # spawning, catch and survey by gender, area and population
 #-----------------------------------------------------------------------------------------------
 for (p in 1:NPopulation)

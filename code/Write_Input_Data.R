@@ -443,17 +443,17 @@ Write_Input_Data<-function(filename)
   print('# INITIIALIZING OBSERVATION CLASS')
   print('#################################################################################################')
   
-  print('# Equilibrium fishing mortality by fleet: SimEquilibriumFishingMortality[NFleet,NArea]')
+  print('# Fished equilibrium fishing mortality by fleet: FishedEquilibriumFishingMortality[NFleet,NArea]')
   for (i in 1:NFleet) {
-    print(c('# Equilibrium fishing mortality by area array for fleet:',i))
-    print(SimEquilibriumFishingMortality[i,])
+    print(c('# Fished equilibrium fishing mortality by area array for fleet:',i))
+    print(FishedEquilibriumFishingMortality[i,])
   }  
   
-  print('# Fishing mortality by year and fleet: SimFishingMortality[NYear,NFleet,NArea]')
+  print('# Assessment fishing mortality by year and fleet: AssessmentFishingMortality[NYear,NFleet,NArea]')
   for (i in 1:NFleet) {
-    print(c('# Fishing mortality by year and area arrays for fleet:',i))
+    print(c('# Assessment fishing mortality by year and area arrays for fleet:',i))
     for (j in 1:NArea)
-      print(SimFishingMortality[,i,j])
+      print(AssessmentFishingMortality[,i,j])
   }   
     
   print('# Population fishery selectivity models: FisherySelectivity.model[NPopulation,NArea]')
