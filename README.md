@@ -1,5 +1,5 @@
 # spatial-reference-points
-# R code to implement spatial reference points for FIMS project
+# R code to implement spatial reference points for MAS project
 #
 # Github repository "spatial-reference-points"
 #
