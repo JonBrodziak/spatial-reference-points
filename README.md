@@ -1,5 +1,5 @@
 # spatial-reference-points
-## Repository for developing R code to implement multi-area spatial reference points
+## Repository for R code to implement multi-area spatial reference points
 
 ## Github repository "spatial-reference-points"
 ## Maintainer: Jon Brodziak, PIFSC
