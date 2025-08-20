@@ -1,17 +1,20 @@
 ################################################################################################
 # SRP.R
 ################################################################################################
-# The R program file SRP.R extends case_study_v1 to include:
-# (1) Standard functions with parameters
+# The R program file SRP.R calculates spatial reference points for metapopulations
+# (1) Standard fishery system functions with parameters
 # (2) Spatial Reference Points (SRP)
 # Jon Brodziak, PIFSC, jon.brodziak@noaa.gov
 ################################################################################################
-# 27-April-2021
+# 19-08-2025
+# Fixed 2 bugs 
+# (1) Use of (g2,g2) in print of FGrid element
+# (2) Use of Recruitment.SpawningBiomassUnits as scalar and array, fixed to be a scalar
+# 27-04-2021
 # Included RecAge parameter for first age in population NAA vector and recruitment lag
 # RecAge can be set to age-0 or age-1
 # If RecaAge=0 then array positions 1:NAge represent ages 0 to (NAge-1) & NAge-1 is a plusgroup
 # If RecaAge=1 then array positions 1:NAge represent ages 1 to NAge & NAge is a plusgroup
-# 
 ################################################################################################
 #
 # (1) MODEL INITIALIZATION
@@ -39,7 +42,7 @@ graphics.off()
 # source.folder <- 'D:/path'
 
 # laptop setup for source.folder
-source.folder <- 'C:/Users/Jon.Brodziak/Desktop/MAS/2021_MAS_Spatial_Reference_Points/SRP/code/'
+source.folder <- 'C:/Users/Jon.Brodziak/Desktop/MAS/2025_MAS_Spatial_Reference_Points/SRP/code/'
 
 # Source the R functions for submodels
 
@@ -393,7 +396,7 @@ for (g1 in 1:NGrid)
             EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g] + tmp
           }
           # Rescale to Spawning Biomass Units
-          EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g]/Recruitment.SpawningBiomassUnits[p,d]      
+          EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g]/Recruitment.SpawningBiomassUnits      
         }
     
     if (VerboseEquilibriumOutput == 1) {
@@ -497,7 +500,7 @@ for (g1 in 1:NGrid)
           }   
           EquilibriumSpawningBiomass[i,p,d,g] <- tmp
           # Rescale to Spawning Biomass Units
-          EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g]/Recruitment.SpawningBiomassUnits[p,d] 
+          EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g]/Recruitment.SpawningBiomassUnits 
         }
     
     if (VerboseEquilibriumOutput == 1) {
@@ -606,7 +609,7 @@ for (g1 in 1:NGrid)
             }   
             EquilibriumSpawningBiomass[i,p,d,g] <- tmp
             # Rescale to Spawning Biomass Units
-            EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g]/Recruitment.SpawningBiomassUnits[p,d] 
+            EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g]/Recruitment.SpawningBiomassUnits 
           }
       
       # Compute L1 distance between iterates of unfished spawning
@@ -690,7 +693,7 @@ for (g1 in 1:NGrid)
     print('Population 2 FGrid Female Numbers at Age in Area 2')
     print(FGridNumbersAtAge[g1,g2,2,2,1,]/OutputNumbersUnits)
     print('Population 2 FGrid Female Spawning Biomass in Area 2')
-    print(FGridSpawningBiomass[g2,g2,2,2,1]*Recruitment.SpawningBiomassUnits/OutputBiomassUnits)
+    print(FGridSpawningBiomass[g1,g2,2,2,1]*Recruitment.SpawningBiomassUnits/OutputBiomassUnits)
     print('_____________________________________________________________________________________________________')
      
   }

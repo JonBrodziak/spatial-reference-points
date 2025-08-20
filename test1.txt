@@ -1,5 +1,5 @@
 # VerboseEquilibriumOutput flag (Verbose=1)
-1
+0
 # NPopulation, the number of populations
 2
 # NAge, the number of age groups in each population
@@ -99,9 +99,8 @@
 # WeightAtLength.B, the weight at length B parameters by population, area and gender
 3.00 2.95 3.00 2.95
 3.00 2.95 3.00 2.95
-# Recruitment.SpawningBiomassUnits, the stock-recruitment biomass units parameters by population and area 
-1000.0 1000.0
-1000.0 1000.0
+# Recruitment.SpawningBiomassUnits, the stock-recruitment biomass units (mt)
+1000.0
 # Recruitment.GenderFraction, the stock-recruitment gender fraction parameters by population, area and gender
 0.5 0.5 0.5 0.5
 0.5 0.5 0.5 0.5

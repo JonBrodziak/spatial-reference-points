@@ -74,7 +74,7 @@ for (p in 1:NPopulation)
         EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g] + tmp
       }
       # Rescale to Spawning Biomass Units
-      EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g]/Recruitment.SpawningBiomassUnits[p,d]      
+      EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g]/Recruitment.SpawningBiomassUnits
     }
 
 
@@ -179,7 +179,7 @@ for (p in 1:NPopulation)
       }   
       EquilibriumSpawningBiomass[i,p,d,g] <- tmp
       # Rescale to Spawning Biomass Units
-      EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g]/Recruitment.SpawningBiomassUnits[p,d] 
+      EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g]/Recruitment.SpawningBiomassUnits 
     }
 
 if (VerboseEquilibriumOutput == 1) {
@@ -287,7 +287,7 @@ for (p in 1:NPopulation) {
         }   
         EquilibriumSpawningBiomass[i,p,d,g] <- tmp
         # Rescale to Spawning Biomass Units
-        EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g]/Recruitment.SpawningBiomassUnits[p,d]
+        EquilibriumSpawningBiomass[i,p,d,g] <- EquilibriumSpawningBiomass[i,p,d,g]/Recruitment.SpawningBiomassUnits
       }
   
   # Compute L1 distance between iterates of unfished spawning

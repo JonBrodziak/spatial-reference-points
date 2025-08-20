@@ -1,0 +1,25 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1588809527713.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "49C99702",
+    "lastKnownWriteTime" : 1588904012,
+    "last_content_update" : 1588904012265,
+    "path" : "C:/Users/Jon.Brodziak/Desktop/MAS/2020_MAS_Data_Simulator/code/case_study_v1.R",
+    "project_path" : "case_study_v1.R",
+    "properties" : {
+        "cursorPosition" : "19,26",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

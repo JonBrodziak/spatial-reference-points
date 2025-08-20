@@ -393,11 +393,8 @@ Write_Input_Data<-function(filename)
   }
 
   
-  print('# Units of female spawning biomass (kg) for recruitment process models: Recruitment.SpawningBiomassUnits[NPopulation,NArea]')
-  for (i in 1:NPopulation) {
-    print(c('# Units of female spawning biomass (kg) by area array for population:',i))
-    print(Recruitment.SpawningBiomassUnits[i,])
-  }
+  print('# Units of female spawning biomass (kg) for recruitment process models: Recruitment.SpawningBiomassUnits')
+  print(Recruitment.SpawningBiomassUnits)
 
   print('# Fraction of recruits by gender parameters for recruitment process models: Recruitment.GenderFraction[NPopulation,NArea]')
   for (i in 1:NPopulation) {

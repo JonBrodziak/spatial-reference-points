@@ -450,15 +450,12 @@ if (WeightAtLength.model[1,1] == 1) {
 	SkipLines <- SkipLines+NGender+1
 }
 
-# Read 2D array for units of spawning used in recruitment models
+# Read the units of spawning used in recruitment models
 #-----------------------------------------------------------------------------------------------
-tmp <- scan(InputFile, nmax=DimPopulationArea, skip=SkipLines, quiet=T)
-Recruitment.SpawningBiomassUnits <- array(tmp,c(NPopulation,NArea))
-for (p in 1:NPopulation) {
-  print(c("Spawning biomass units for recruitment by area for population",p))
-  print(Recruitment.SpawningBiomassUnits[p,]) 
-}
-SkipLines <- SkipLines+NArea+1
+Recruitment.SpawningBiomassUnits <- scan(InputFile, skip=SkipLines, n=1, quiet=T)
+print("Spawning biomass units for recruitment")
+print(Recruitment.SpawningBiomassUnits)
+SkipLines <- SkipLines+2
 
 # Read 3D array for gender fractions of recruitment output
 #-----------------------------------------------------------------------------------------------

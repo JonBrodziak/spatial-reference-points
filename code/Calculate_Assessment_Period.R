@@ -89,7 +89,7 @@ for (y in 1:NYear)
         SpawningBiomass[y,p,d,g] <- tmp
         
         # Rescale to Spawning Biomass Units
-        SpawningBiomass[y,p,d,g] <- SpawningBiomass[y,p,d,g]/Recruitment.SpawningBiomassUnits[p,d] 
+        SpawningBiomass[y,p,d,g] <- SpawningBiomass[y,p,d,g]/Recruitment.SpawningBiomassUnits 
       }
   
   # (2.3.6) CALCULATE RECRUITMENT BY POPULATION, AREA, AND GENDER FOR YEAR y
